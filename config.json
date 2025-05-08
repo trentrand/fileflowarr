@@ -1,0 +1,7 @@
+{
+  "sonarrUrl": "http://your-sonarr:8989",
+  "sonarrApiKey": "YOUR_SONARR_API_KEY",
+  "radarrUrl": "http://your-radarr:7878",
+  "radarrApiKey": "YOUR_RADARR_API_KEY",
+  "fileflowsUrl": "http://your-fileflows:19200"
+}
