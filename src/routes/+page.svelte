@@ -23,6 +23,7 @@
   let adding: Record<number, boolean> = {};
   let hideAdded = false;
   let tab: "series" | "movie" = "series";
+  let fileflowsUrl: string = "";
 
   $: totalFinal = savings.reduce((sum, s) => sum + (s.FinalSize || 0), 0);
   $: totalOriginal = savings.reduce((sum, s) => sum + (s.OriginalSize || 0), 0);
@@ -70,6 +71,7 @@
     error = "";
     try {
       const config = await fetchConfig();
+      fileflowsUrl = config.fileflowsUrl || "";
       const [series, movies, libraries, savingsData] = await Promise.all([
         fetchSonarrSeries(config),
         config.radarrUrl && config.radarrApiKey
@@ -168,12 +170,24 @@
         <svg width="36" height="36" fill="none" viewBox="0 0 36 36"><rect width="36" height="36" rx="8" fill="#2563eb"/><path d="M10 18h16M18 10v16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
         FileFlowarr
       </h1>
-      {#if savings.length}
-        <span class="inline-block bg-green-100 text-green-800 text-base font-semibold px-4 py-2 rounded-lg shadow">
-          Saved <span class="font-bold">{((totalOriginal - totalFinal) / 1_000_000_000).toFixed(1)} GB</span>
-          from <span class="font-bold">{(totalOriginal / 1_000_000_000).toFixed(1)} GB</span>
-        </span>
-      {/if}
+      <div class="flex flex-col md:flex-row md:items-center gap-4">
+        {#if savings.length}
+          <span class="inline-block bg-green-100 text-green-800 text-base font-semibold px-4 py-2 rounded-lg shadow">
+            Saved <span class="font-bold">{((totalOriginal - totalFinal) / 1_000_000_000).toFixed(1)} GB</span>
+            from <span class="font-bold">{(totalOriginal / 1_000_000_000).toFixed(1)} GB</span>
+          </span>
+        {/if}
+        {#if fileflowsUrl}
+          <a
+            href={fileflowsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition"
+          >
+            Go to FileFlows
+          </a>
+        {/if}
+      </div>
     </div>
   </header>
   <main class="max-w-5xl mx-auto px-4">
